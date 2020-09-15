@@ -7,9 +7,10 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Boxer;
+import model.Coefficients;
 import model.Skill;
 
-public class Fight {
+public class Fight implements Coefficients {
 
     private final static Logger LOGGER = Logger.getLogger(Fight.class.getName());
     private final Random random = new Random();
@@ -17,6 +18,9 @@ public class Fight {
     private final List<Boxer> boxers;
     private List<String> defSkills;
     private List<String> ofSkills;
+
+    int points1;
+    int points2;
 
     public Fight(List<Boxer> boxers) {
         this.boxers = boxers;
@@ -49,6 +53,7 @@ public class Fight {
 
         LOGGER.log(Level.INFO, boxers.get(0).getName() + " - Power: " + boxers.get(0).getPower() + ". Endurance: " + boxers.get(0).getEndurance());
         LOGGER.log(Level.INFO, boxers.get(1).getName() + " - Power: " + boxers.get(1).getPower() + ". Endurance: " + boxers.get(1).getEndurance());
+        LOGGER.log(Level.INFO, "Points: " + points1 + ":" + points2);
     }
 
     /**
@@ -86,35 +91,41 @@ public class Fight {
         double res1;
         double res2;
 
-        res1 = ((boxer1.getEndurance() * 0.4)
-                + (boxer1.getStrength() * 0.1)
-                + (boxer1.getPsyche() * 0.1)
-                + (ofSkill.getAbility() * 0.2)
-                + (ofSkill.getImpact() * 0.2)) / 10;
+        res1 = ((boxer1.getEndurance() * COEENDURANCE)
+                + (boxer1.getStrength() * COESTRENGHT)
+                + (boxer1.getMotivation() * COEMOTIVATION)
+                + (ofSkill.getAbility() * COEABILITY)
+                + (ofSkill.getImpact() * COEIMPACT)
+                + (random.nextInt(10) * COELUCK)) / 10;
 
-        res2 = ((boxer2.getEndurance() * 0.4)
-                + (boxer2.getStrength() * 0.1)
-                + (boxer2.getPsyche() * 0.1)
-                + (defSkill.getAbility() * 0.2)
-                + (defSkill.getImpact() * 0.2)) / 10;
+        res2 = ((boxer2.getEndurance() * COEENDURANCE)
+                + (boxer2.getStrength() * COESTRENGHT)
+                + (boxer2.getMotivation() * COEMOTIVATION)
+                + (defSkill.getAbility() * COEABILITY)
+                + (defSkill.getImpact() * COEIMPACT)
+                + (random.nextInt(10) * COELUCK)) / 10;
 
         if (res1 > res2) {
             boxer2.setPower(boxer2.getPower() - res1);
+            boxer1.setMotivation(boxer1.getMotivation() + COEMOTIVATIONATTACK); // increasing psyche after successfull attack
+            points1++;
             LOGGER.log(Level.INFO, boxer1.getName() + " wins this attack: " + res1 + ":" + res2);
         } else {
             boxer1.setPower(boxer1.getPower() - res2);
+            boxer2.setMotivation(boxer2.getMotivation() + COEMOTIVATIONDEFENSE); // increasing psyche after successfull defense
             LOGGER.log(Level.INFO, boxer2.getName() + " wins this attack: " + res1 + ":" + res2);
         }
 
-        boxer1.setEndurance(boxer1.getEndurance() - 0.1);
-        boxer2.setEndurance(boxer2.getEndurance() - 0.1);
+        boxer1.setEndurance(boxer1.getEndurance() - COEENDURANCEATTACK); // attacking boxer
+        boxer2.setEndurance(boxer2.getEndurance() - COEENDURANCEDEFENSE); // defending boxer
     }
 
     /**
-     * Check after every attack, if both boxers still have enough power to
-     * continue.
+     * Check after every attack, if both boxers still have enough power and
+     * endurance to continue.
      *
-     * @return true, if at least 1 of the boxers doesn't have enough power: <=0
+     * @return true, if at least 1 of the boxers doesn't have enough power or
+     * endurance: <=0
      */
     private boolean checkIfEnd() {
         if (boxers.get(0).getPower() <= 0) {
@@ -135,8 +146,8 @@ public class Fight {
 
     /* --- Init --- */
     /**
-     * Putting the skills into a list depending on their probabilty. Probabilty
-     * of 3 means, that skill will be put into the list 3 times.
+     * Putting the skills into a list depending on their probability.
+     * Probability of 3 means, that skill will be put into the list 3 times.
      */
     private void loadSkills() {
         List<Skill> defSkillsTemp = boxers.get(0).getDefense().getSkills();
@@ -153,13 +164,6 @@ public class Fight {
             for (int i = 0; i < s.getProbability(); i++) {
                 ofSkills.add(s.getName());
             }
-        });
-
-        ofSkillsTemp.forEach((s) -> {
-            LOGGER.log(Level.INFO, s.toString());
-        });
-        defSkillsTemp.forEach((s) -> {
-            LOGGER.log(Level.INFO, s.toString());
         });
     }
 }

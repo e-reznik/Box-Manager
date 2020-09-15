@@ -11,15 +11,18 @@ public class Boxer {
     private double power = 10;
     private double endurance;
     private double strength;
-    private double psyche;
+    private double motivation;
 
-    public Boxer(String name, Offense offense, Defense defense, double endurance, double strength, double psyche) {
+    // weight, size
+    // tactics (offensive, defensive)
+    
+    public Boxer(String name, Offense offense, Defense defense, double endurance, double strength, double motivation) {
         this.name = name;
         this.offense = offense;
         this.defense = defense;
         this.endurance = endurance;
         this.strength = strength;
-        this.psyche = psyche;
+        this.motivation = motivation;
     }
 
 }

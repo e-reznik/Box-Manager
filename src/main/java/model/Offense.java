@@ -13,9 +13,9 @@ public class Offense {
     }
 
     public Offense(int[] intJeb, int[] intCross, int[] intHook) {
-        Skill jeb = new Skill("jab", intJeb[0], intJeb[1], intJeb[2], 5);
-        Skill cross = new Skill("cross", intCross[0], intCross[1], intCross[2], 3);
-        Skill hook = new Skill("hook", intHook[0], intHook[1], intHook[2], 1);
+        Skill jeb = new Skill("jab", intJeb[0], intJeb[1], 5);
+        Skill cross = new Skill("cross", intCross[0], intCross[1], 3);
+        Skill hook = new Skill("hook", intHook[0], intHook[1], 1);
 
         skills.add(jeb);
         skills.add(cross);

@@ -13,9 +13,9 @@ public class Defense {
     }
 
     public Defense(int[] intBlock, int[] intParry, int[] intSlip) {
-        Skill block = new Skill("block", intBlock[0], intBlock[1], intBlock[2], 3);
-        Skill parry = new Skill("parry", intParry[0], intParry[1], intParry[2], 2);
-        Skill slip = new Skill("slip", intSlip[0], intSlip[1], intSlip[2], 1);
+        Skill block = new Skill("block", intBlock[0], intBlock[1], 3);
+        Skill parry = new Skill("parry", intParry[0], intParry[1], 2);
+        Skill slip = new Skill("slip", intSlip[0], intSlip[1], 1);
 
         skills.add(block);
         skills.add(parry);
